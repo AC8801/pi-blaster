@@ -11,33 +11,6 @@ Pi-blaster project is based on the excellent work of Richard Hirst for
 
 ## How to install
 
-### Arch Linux
-
-Thanks to [Patrick Wozniak](https://github.com/patlux), you can easily install pi-blaster
-on archlinux with:
-
-    yaourt -S pi-blaster-git
-
-And activate the systemd-service with:
-
-    sudo systemctl enable pi-blaster
-
-### Build your own deb package and install with dpkg
-
-The Debian package relies on systemd which means you must have Raspbian 8 or
-later (aka "Jessie"). Run `cat /etc/debian_version`) to check what version
-you are currently running.
-
-Install the debian tools required to compile and prepare the package:
-
-    sudo apt-get install debhelper dh-autoreconf dh-systemd dpkg-dev \
-      init-system-helpers autoconf
-
-And build the package:
-
-    dpkg-buildpackage -us -uc -i && sudo dpkg -i ../pi-blaster*.deb
-
-
 ### Build and install directly from source
 
 The build environment is based on Autotools to allow for compilation on the
@@ -105,74 +78,7 @@ Examples:
 
     echo "release 17" > /dev/pi-blaster
 
-### NodeJS Library
 
-NodeJS users can use [pi-blaster.js](https://github.com/sarfata/pi-blaster.js).
-
-### C#
-
-A C# example was contributed by [Vili
-Volcini](https://plus.google.com/109312219443477679717/posts). It is available
-on [this stackoverflow
-thread](http://stackoverflow.com/questions/17241071/writing-to-fifo-file-linux-monoc).
-
-## How to adjust the frequency and the resolution of the PWM
-
-On startup, pi-blaster gives you the frequency of the PWM, the number of steps
-that you can control, the maximum and the minimum period of a pulse.
-
-    sudo ./pi-blaster
-    Using hardware:               PWM
-    Number of channels:           8
-    PWM frequency:                100 Hz
-    PWM steps:                    1000
-    Maximum period (100  %):      10000us
-    Minimum period (0.100%):      10us
-
-You can adjust those by changing a few defines at the top of the source code:
-
- * `NUM_SAMPLES`: The number of steps
- * `SAMPLE_US`: The time of one step (minimum period)
-
-If you do not need a resolution of 1000 steps (approximately equivalent to a 10
-bit DAC), then you can reduce the number of samples or increase the duration of
-the steps.
-
-Richard Hirst who wrote the original code recommended not going below 2us for
-`SAMPLE_US`.
-
-## Options
-
-To override the default list of supported GPIO pins and specify fewer (or more)
-you can specify a comma separated list of GPIO numbers. This is also the default
-list:
-
-    --gpio 4,17,18,27,21,22,23,24,25
-
-To use the BCM2835's PCM peripheral instead of its PWM peripheral to time the
-DMA transfers, pass the option:
-
-    --pcm
-
-This is useful if you are already using the chip's PWM peripheral, for example
-for audio output.
-
-To invert the pulse (off = pin HIGH, pulse = pin LOW), use:
-
-    --invert
-
-This can be useful for common anode LEDs or other devices that expect an
-active-low signal.
-
-To keep pi-blaster running in the foreground without running as a daemon use:
-
-    -D
-
-To view help or version information, use:
-
-    --help
-
-    --version
 
 ## Warnings and other caveats
 
